@@ -22,6 +22,7 @@ var NBATeams = ["Nets","Knicks","Lakers","Celtics","Bulls","Raptors","Warriors",
           a.addClass("NBAteams");
           // Adding a data-attribute with a value of the movie at index i
           a.attr("data-name", NBATeams[i]);
+
           // Providing the button's text with a value of the movie at index i
           a.text(NBATeams[i]);
           // Adding the button to the HTML
@@ -52,6 +53,7 @@ var NBATeams = ["Nets","Knicks","Lakers","Celtics","Bulls","Raptors","Warriors",
      $("button").on("click", function() {
      	console.log("test1");
       var person = $(this).attr("data-name");
+      
       var queryURL = "http://api.giphy.com/v1/gifs/search?q=" +
         person + "&api_key=dc6zaTOxFJmzC&limit=10";
         	console.log(person);
@@ -61,16 +63,36 @@ var NBATeams = ["Nets","Knicks","Lakers","Celtics","Bulls","Raptors","Warriors",
         })
         .done(function(response) {
           var results = response.data;
+        
+          //var static = "http://media.giphy.com/media/" +  + "/200_s.gif"
+         // $("button").on("click", function()
+          //{})
 
           for (var i = 0; i < results.length; i++) {
             var gifDiv = $("<div class='item'>");
 
             var rating = results[i].rating;
 
+
             var p = $("<p>").text("Rating: " + rating);
 
             var personImage = $("<img>");
+
+            
+            
+
+
+            //personImage.attr("src", )
+
+           
             personImage.attr("src", results[i].images.fixed_height.url);
+
+            var test1 = results[i].images.fixed_height.url;
+            console.log(test1);
+            test2 = test1.replace("200.gif", "200_s.gif");
+            console.log(test2 + "   a");
+
+            personImage.attr("src", test2);
 
             gifDiv.prepend(p);
             gifDiv.prepend(personImage);
