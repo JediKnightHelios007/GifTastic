@@ -1,6 +1,7 @@
 $(document).ready(function() {
 //Code borrowed from class examples
 
+var test1;
 
 //Where are thirty teams are placed.
 var NBATeams = ["Nets","Knicks","Lakers","Celtics","Bulls","Raptors","Warriors","Cavaliers","Spurs","Wizards","Thunder","Rockets","Magic","Hawks","Pacers","Bucks","Jazz","Clippers","Mavericks","Grizzlies","Trailblazers","Suns","Heat","Pistons","Hornets","76ers","Nuggets","Pelicans","Kings","Timberwolves"];
@@ -18,8 +19,6 @@ var NBATeams = ["Nets","Knicks","Lakers","Celtics","Bulls","Raptors","Warriors",
           // Then dynamicaly generating buttons for each movie in the array.
           // This code $("<button>") is all jQuery needs to create the start and end tag. (<button></button>)
           var a = $("<button>");
-          // Adding a class
-          a.addClass("NBAteams");
           // Adding a data-attribute with a value of the movie at index i
           a.attr("data-name", NBATeams[i]);
 
@@ -68,6 +67,7 @@ var NBATeams = ["Nets","Knicks","Lakers","Celtics","Bulls","Raptors","Warriors",
          // $("button").on("click", function()
           //{})
 
+
           for (var i = 0; i < results.length; i++) {
             var gifDiv = $("<div class='item'>");
 
@@ -77,22 +77,16 @@ var NBATeams = ["Nets","Knicks","Lakers","Celtics","Bulls","Raptors","Warriors",
             var p = $("<p>").text("Rating: " + rating);
 
             var personImage = $("<img>");
-
-            
-            
-
-
-            //personImage.attr("src", )
-
-           
+            personImage.addClass("data-state");
+       
             personImage.attr("src", results[i].images.fixed_height.url);
+            test1 = results[i].images.fixed_height.url;
+           // test2 = test1.replace("200.gif", "200_s.gif");
+            //personImage.attr("src", test2);*/
 
-            var test1 = results[i].images.fixed_height.url;
-            console.log(test1);
-            test2 = test1.replace("200.gif", "200_s.gif");
-            console.log(test2 + "   a");
+            personImage.attr("src", test1.replace("200.gif", "200_s.gif"));
 
-            personImage.attr("src", test2);
+            //var state = $(this).attr("data-state");
 
             gifDiv.prepend(p);
             gifDiv.prepend(personImage);
@@ -100,6 +94,27 @@ var NBATeams = ["Nets","Knicks","Lakers","Celtics","Bulls","Raptors","Warriors",
             $("#gifs-appear-here").prepend(gifDiv);
           
           }
+            $("img").click(function() {
+              console.log("Hello WOrld");
+              //var test2 = results[i].images.fixed_height.url;
+              
+              
+              $(this).attr("src", test1.replace("200_s.gif", "200.gif"));
+            });
+          
+
+  /*  switch (state) {
+        case "animate":
+          $(this).attr("data-state", "still");
+          $(this).attr("src", $(this).attr("data-still"));
+          break;
+        case "still":
+          $(this).attr("data-state", "animate");
+          $(this).attr("src", $(this).attr("data-animate"));
+          break;
+        default:
+          console.log("I'm not doin a thing!");
+      }*/
         });
     });
      });
