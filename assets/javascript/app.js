@@ -1,4 +1,4 @@
-$(document).ready(function() {
+//$(document).ready(function() {
 //Code borrowed from class examples
 
 var test1;
@@ -8,7 +8,7 @@ var NBATeams = ["Nets","Knicks","Lakers","Celtics","Bulls","Raptors","Warriors",
 
    // Function for displaying NBA data
       function renderButtons() {
-      		console.log("help");
+      		
         // Deleting the movie buttons prior to adding new movie buttons
         // (this is necessary otherwise we will have repeat buttons)
         $("#NBAbuttons").empty();
@@ -26,7 +26,7 @@ var NBATeams = ["Nets","Knicks","Lakers","Celtics","Bulls","Raptors","Warriors",
           a.text(NBATeams[i]);
           // Adding the button to the HTML
           $("#NBAbuttons").append(a);
-          	console.log("help");
+          
         }
       }
 
@@ -41,7 +41,7 @@ var NBATeams = ["Nets","Knicks","Lakers","Celtics","Bulls","Raptors","Warriors",
         var NBAteams = $("#NBA-input").val().trim();
         // The movie from the textbox is then added to our array
         NBATeams.push(NBAteams);
-
+    
         // calling renderButtons which handles the processing of our movie array
         renderButtons();
       });
@@ -49,13 +49,13 @@ var NBATeams = ["Nets","Knicks","Lakers","Celtics","Bulls","Raptors","Warriors",
       // Calling the renderButtons function at least once to display the initial list of movies
       renderButtons();
 
-     $("button").on("click", function() {
+     $("button").click(function() {
      	console.log("test1");
-      var person = $(this).attr("data-name");
+      var nba = $(this).attr("data-name");
       
       var queryURL = "http://api.giphy.com/v1/gifs/search?q=" +
-        person + "&api_key=dc6zaTOxFJmzC&limit=10";
-        	console.log(person);
+        nba + "&api_key=dc6zaTOxFJmzC&limit=10";
+       
       $.ajax({
           url: queryURL,
           method: "GET"
@@ -117,4 +117,4 @@ var NBATeams = ["Nets","Knicks","Lakers","Celtics","Bulls","Raptors","Warriors",
       }*/
         });
     });
-     });
+   //  });
