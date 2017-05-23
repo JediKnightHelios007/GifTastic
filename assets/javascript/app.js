@@ -1,5 +1,4 @@
-//$(document).ready(function() {
-//Code borrowed from class examples
+
 
 var test1;
 
@@ -20,6 +19,7 @@ var NBATeams = ["Nets","Knicks","Lakers","Celtics","Bulls","Raptors","Warriors",
           // This code $("<button>") is all jQuery needs to create the start and end tag. (<button></button>)
           var a = $("<button>");
           // Adding a data-attribute with a value of the movie at index i
+          a.addClass("NBAButton");
           a.attr("data-name", NBATeams[i]);
 
           // Providing the button's text with a value of the movie at index i
@@ -32,7 +32,6 @@ var NBATeams = ["Nets","Knicks","Lakers","Celtics","Bulls","Raptors","Warriors",
 
       // This function handles events where one button is clicked
       $("#addNBA").on("click", function(event) {
-      	console.log(NBATeams);
         // event.preventDefault() prevents the form from trying to submit itself.
         // We're using a form so that the user can hit enter instead of clicking the button if they want
         event.preventDefault();
@@ -41,80 +40,75 @@ var NBATeams = ["Nets","Knicks","Lakers","Celtics","Bulls","Raptors","Warriors",
         var NBAteams = $("#NBA-input").val().trim();
         // The movie from the textbox is then added to our array
         NBATeams.push(NBAteams);
+          $("#NBA-input").val("");
     
         // calling renderButtons which handles the processing of our movie array
         renderButtons();
       });
 
-      // Calling the renderButtons function at least once to display the initial list of movies
-      renderButtons();
+// fetchAnimalGifs will fetch animal Gifs with the Giphy API
+function fetchNBAGifs() {
+  // Get the animal name from the button clicked
+  var NBAName = $(this).attr("data-name");
+  var NBAStr = NBAName.split(" ").join("+");
 
-     $("button").click(function() {
-     	console.log("test1");
-      var nba = $(this).attr("data-name");
-      
-      var queryURL = "http://api.giphy.com/v1/gifs/search?q=" +
-        nba + "&api_key=dc6zaTOxFJmzC&limit=10";
-       
-      $.ajax({
-          url: queryURL,
-          method: "GET"
-        })
-        .done(function(response) {
-          var results = response.data;
-        
-          //var static = "http://media.giphy.com/media/" +  + "/200_s.gif"
-         // $("button").on("click", function()
-          //{})
+  // Construct the Giphy URL
+  var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + NBAStr + 
+                 "&rating=pg-13&limit=20&api_key=dc6zaTOxFJmzC";
 
+  // Make the AJAX call to the Giphy API
+  $.ajax({
+    method: "GET",
+    url: queryURL,
+  })
+  .done(function( result ) {
+    // Get the results array
+    var dataArray = result.data;
 
-          for (var i = 0; i < results.length; i++) {
-            var gifDiv = $("<div class='item'>");
+    // Create and display div elements for each of the returned Gifs
+    $("#gifs-appear-here").empty();
+    for (var i = 0; i < dataArray.length; i++) {
+      var newDiv = $("<div>");
+      newDiv.addClass("NBAGif");
 
-            var rating = results[i].rating;
+      var newRating = $("<h2>").html("Rating: " + dataArray[i].rating);
+      newDiv.append(newRating);
 
+      var newImg = $("<img>");
+      newImg.attr("src", dataArray[i].images.fixed_height_still.url);
+      newImg.attr("data-still", dataArray[i].images.fixed_height_still.url);
+      newImg.attr("data-animate", dataArray[i].images.fixed_height.url);
+      newImg.attr("data-state", "still");
+      newDiv.append(newImg);
 
-            var p = $("<p>").text("Rating: " + rating);
+      // Append the new Gifs to the gifPanel
+      $("#gifs-appear-here").append(newDiv);
+    }
+  });
+}
 
-            var personImage = $("<img>");
-            personImage.addClass("data-state");
-       
-            personImage.attr("src", results[i].images.fixed_height.url);
-            test1 = results[i].images.fixed_height.url;
-           // test2 = test1.replace("200.gif", "200_s.gif");
-            //personImage.attr("src", test2);*/
+// animateAnimalGif will animate a still Gif and stop a moving Gif
+function animateNBAGif() {
+  // The image state will be either "still" or "animated"
+  var state = $(this).find("img").attr("data-state");
 
-            personImage.attr("src", test1.replace("200.gif", "200_s.gif"));
+  // Make the Gif either animated or still depending on the "data-state" value
+  if (state === "still") {
+    $(this).find("img").attr("src", $(this).find("img").attr("data-animate"));
+    $(this).find("img").attr("data-state", "animate");
+  } else {
+    $(this).find("img").attr("src", $(this).find("img").attr("data-still"));
+    $(this).find("img").attr("data-state", "still");
+  }
+}
 
-            //var state = $(this).attr("data-state");
+// Render the initial animal buttons when the HTML has finished loading
+$(document).ready(function() {
+  renderButtons();
+});
 
-            gifDiv.prepend(p);
-            gifDiv.prepend(personImage);
+// An event handler for the animal buttons to fetch appropriate Gifs
+$(document).on("click", ".NBAButton", fetchNBAGifs);
 
-            $("#gifs-appear-here").prepend(gifDiv);
-          
-          }
-            $("img").click(function() {
-              console.log("Hello WOrld");
-              //var test2 = results[i].images.fixed_height.url;
-              
-              
-              $(this).attr("src", test1.replace("200_s.gif", "200.gif"));
-            });
-          
-
-  /*  switch (state) {
-        case "animate":
-          $(this).attr("data-state", "still");
-          $(this).attr("src", $(this).attr("data-still"));
-          break;
-        case "still":
-          $(this).attr("data-state", "animate");
-          $(this).attr("src", $(this).attr("data-animate"));
-          break;
-        default:
-          console.log("I'm not doin a thing!");
-      }*/
-        });
-    });
-   //  });
+// Add an event handler for the animal Gifs to make the image animate and stop
+$(document).on("click", ".NBAGif", animateNBAGif);
